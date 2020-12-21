@@ -34,6 +34,7 @@ func (atmdw *AccessTokenMDW) Middleware(fn http.Handler) http.Handler {
 			ctx := context.WithValue(r.Context(), "user_id", userId)
 			r = r.WithContext(ctx)
 		}
+		fn.ServeHTTP(w, r)
 	})
 }
 
