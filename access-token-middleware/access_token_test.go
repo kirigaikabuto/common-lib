@@ -28,7 +28,7 @@ func TestNewAccessTokenStore(t *testing.T) {
 }
 
 func TestAccessTokenStore_Save(t *testing.T) {
-	err = accessTokenStoreTest.Save(value, key, time.Duration(1000000))
+	err = accessTokenStoreTest.Save(value, key, time.Duration(500000000000))
 	if err != nil {
 		t.Error(err)
 	}
