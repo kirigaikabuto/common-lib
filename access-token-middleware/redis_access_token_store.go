@@ -2,6 +2,7 @@ package access_token_middleware
 
 import (
 	"encoding/json"
+	"errors"
 	"github.com/go-redis/redis"
 	"strconv"
 	"time"
@@ -35,6 +36,9 @@ func (acs *accessTokenStore) Save(userId, token string, ttl time.Duration) error
 func (acs *accessTokenStore) Get(token string) (string, error) {
 	val, err := acs.clt.Get("user_id:" + token).Bytes()
 	if err != nil {
+		if err == redis.Nil {
+			return "", errors.New("no data")
+		}
 		return "", err
 	}
 	userId := ""
@@ -42,4 +46,13 @@ func (acs *accessTokenStore) Get(token string) (string, error) {
 		return "", err
 	}
 	return userId, nil
+}
+
+func (acs *accessTokenStore) Delete(token string) error {
+	_, err := acs.clt.Del(token).Result()
+	if err != nil {
+		return err
+	}
+	return nil
+
 }

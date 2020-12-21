@@ -5,4 +5,5 @@ import "time"
 type AccessTokenStore interface {
 	Save(userId, key string, ttl time.Duration) error
 	Get(token string) (string, error)
+	Delete(token string) error
 }
