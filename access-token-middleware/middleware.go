@@ -20,6 +20,11 @@ func NewAccessTokenMDW(accessTokenStore AccessTokenStore) (*AccessTokenMDW, erro
 
 func (atmdw *AccessTokenMDW) Middleware(fn http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		allowedHeaders := "Accept, Content-Type, Content-Length, Accept-Encoding, Authorization,X-CSRF-Token"
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+		w.Header().Set("Access-Control-Allow-Headers", allowedHeaders)
+		w.Header().Set("Access-Control-Expose-Headers", "Authorization")
 		key := r.Header.Get("Authorization")
 		if key == "" {
 			respondJSON(w, http.StatusInternalServerError, &customError{"For access needed authorization header"})
